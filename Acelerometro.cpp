@@ -1,9 +1,6 @@
 #include "Acelerometro.h"
 #include <Wire.h>
 
-//Constantes de Interrupcio
-
-
 /////////////////////////////////////////////////////
 //////DEFINITION ADDRES // ACCEL CONFIG ////////////////
 //////////////////////////////////////////////////////
@@ -19,6 +16,7 @@ void I2Cread(uint8_t DireccionMPU, uint8_t DireccionRegistro, uint8_t NumeroByte
   Wire.beginTransmission(DireccionMPU);
   Wire.write(DireccionRegistro);
   Wire.endTransmission();
+  
   Wire.requestFrom(DireccionMPU, NumeroBytes);
   uint8_t index = 0;
   while (Wire.available())
@@ -55,7 +53,7 @@ void configuracionAcelerometro(){
   //Configuración de giroscopio
   I2CwriteByte(MPU9250_ADDRESS, 27, GYRO_FULL_SCALE_2000_DPS);
 }
-
+/*
 void termometro(float RoomTemp_Offset, float Temp_Sensitivity, float degC )
 {
   //Lectura temperatura
@@ -77,7 +75,7 @@ void termometro(float RoomTemp_Offset, float Temp_Sensitivity, float degC )
   Serial.println();
   Serial.println("-------------------------- \n \n \n");
 
-}
+}*/
 
 //DIVISION termometro-acelerometro
 
@@ -115,7 +113,7 @@ void acelerometro()
 }
 
 //--------------------------------------------------------
-
+/*
 void giroscopio(double radio_helice)
 {
 
@@ -157,4 +155,4 @@ void giroscopio(double radio_helice)
   Serial.print(vel_viento);
   Serial.println(" m/s");
 
-}
+}*/

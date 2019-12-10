@@ -3,6 +3,7 @@
     FECHA : 11/11/2019
     En este programa hemos implementado la medida de temperatura. Cada 10 segundos muestra las medidas
   ---------------------------------------------------------------------------------------------*/
+#include <Wire.h>
 #include <EEPROM.h>
 #include "Constantes.h"
 #include "Sensores.h"
@@ -23,6 +24,8 @@ Serial.begin(9600); //inicializa puerto serie
     char iniciar = Serial.read();
        if (iniciar=='I'){
           Serial.println("Inicializando...");
+          EEPROM.begin(512); //inicializa memoria no volátil
+          ads1115.begin(); //inicializa ads          
           Serial.println("Ajustando la ganancia...");
           ads1115.setGain(GAIN_ONE); //ajusta las ganancias
           Serial.println("Rango del ADC: +/- 4.096V (Resolución 2mV)");    
@@ -30,19 +33,35 @@ Serial.begin(9600); //inicializa puerto serie
           //CONFIGURANDO GPS//
           setupGPS();
           //CONFIGURANDO ACELEROMETRO//
-          configuracionAcelerometro();
+          Serial.println("Configurando acelerónetro...");
           pinMode(interruptPin_ACC, INPUT_PULLUP);
           attachInterrupt(digitalPinToInterrupt(interruptPin_ACC), handleInterrupt_ACC, FALLING); // handleInterrupt_ACC = handleInterrupt
+          configuracionAcelerometro();
           //FIN CONFIGURACION ACELEROMETRO//
                      
-        }//if iniciar       
-}
+        }//if iniciar   
 
+  int estado = EEPROM.read(0); //lee la direccion 0 de la memoria
+    
+    if (estado==1){ //si el estado es 1, salta al loop();
+      Serial.println("Inicializando...");
+      loop();
+    }
+    else { //en caso contrario salta al loop()
+      Serial.println("Inicializando...");
+      } 
+}
+//---------------------------------
+//FIN SETUP//
+
+ /////////////////////////////////////
+/////////////// LOOP  ////////////////
+//////////////////////////////////////
 void loop() {
   int16_t ADCH = ads1115.readADC_SingleEnded(pin_entrada_humedad);
   int16_t ADCT = ads1115.readADC_SingleEnded(pin_entrada_temperatura);
   int16_t ADCL = ads1115.readADC_SingleEnded(pin_entrada_luz);
-delay(1000);
+      delay(1000);
       Serial.println("¿Qué quieres hacer?");
       Serial.println("0. Modo de muestreo de todos los sensores.");
       Serial.println("1. Sensor de humedad.");
@@ -63,10 +82,10 @@ delay(1000);
     if (menu=='1'){humedad(pin_entrada_humedad, AirValue, WaterValue, ADCH); }
     //if (menu=='2'){salinity_reading(power_pin_sal, pin_entrada_sal, DistilledValue, SalinityValue, ADCS);}
     if (menu=='2'){temperatura(b, m, ADCT, pin_entrada_temperatura);
-    termometro(RoomTemp_Offset, Temp_Sensitivity, degC );
+   // termometro(RoomTemp_Offset, Temp_Sensitivity, degC );
     }
     if (menu=='3'){luminosidad(pin_entrada_luz, ADCL);}
-    if (menu=='4'){loop();}
+    if (menu=='4'){humedad(pin_entrada_humedad, AirValue, WaterValue, ADCH);}
     if (menu=='5'){lecturaGPS();}
     }//FIN WHILE CONDICION DATA CORRECTO
     if (menu=='6'){

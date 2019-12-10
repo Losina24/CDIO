@@ -8,7 +8,7 @@ int porcentaje_lineal(int max, int min, int16_t read){
 // HUMEDAD //
 void humedad(int pin_entrada, int WaterValue, int AirValue, int16_t adc){
   int16_t reading = adc;
-  int16_t humedad = porcentaje_lineal(WaterValue, AirValue, reading);
+  int16_t humedad = porcentaje_lineal(AirValue, WaterValue, reading);
 
     if (humedad<0) {
       humedad = 0;
@@ -35,10 +35,10 @@ void temperatura(double b, double m, int16_t adc, int pin_entrada){    //Lectura
   double temperatura = ((x - b) / m);
 
   Serial.println("===================");
-  Serial.println("HUMEDAD");
+  Serial.println("TEMPERATURA");
   Serial.println("Pin: ");
   Serial.println(pin_entrada);
-  Serial.println("Temperatura (ÂºC): ");
+  Serial.println("Temperatura (ºC): ");
   Serial.print(temperatura); // Valor calculado de temperatura
   Serial.println();
   Serial.println("===================");
