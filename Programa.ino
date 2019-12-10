@@ -7,6 +7,7 @@
 #include "Constantes.h"
 #include "Sensores.h"
 #include "Acelerometro.h"
+#include "GPS.h"
  
 void ICACHE_RAM_ATTR handleInterrupt_ACC() {
   interruptCounter_ACC++;
@@ -26,7 +27,8 @@ Serial.begin(9600); //inicializa puerto serie
           ads1115.setGain(GAIN_ONE); //ajusta las ganancias
           Serial.println("Rango del ADC: +/- 4.096V (Resolución 2mV)");    
 
-
+          //CONFIGURANDO GPS//
+          setupGPS();
           //CONFIGURANDO ACELEROMETRO//
           configuracionAcelerometro();
           pinMode(interruptPin_ACC, INPUT_PULLUP);
@@ -65,7 +67,7 @@ delay(1000);
     }
     if (menu=='3'){luminosidad(pin_entrada_luz, ADCL);}
     if (menu=='4'){loop();}
-    if (menu=='5'){/*lecturaGPS();*/}
+    if (menu=='5'){lecturaGPS();}
     }//FIN WHILE CONDICION DATA CORRECTO
     if (menu=='6'){
       for(int i=0;i<11;i++){
