@@ -28,7 +28,8 @@ Serial.begin(9600); //inicializa puerto serie
           ads1115.begin(); //inicializa ads          
           Serial.println("Ajustando la ganancia...");
           ads1115.setGain(GAIN_ONE); //ajusta las ganancias
-          Serial.println("Rango del ADC: +/- 4.096V (Resolución 2mV)");    
+          Serial.println("Rango del ADC: +/- 4.096V (Resolución 2mV)");
+          pinMode(power_pin_sal, OUTPUT); //define el pin positivo para el sensor de sal       
 
           //CONFIGURANDO GPS//
           setupGPS();
@@ -61,13 +62,14 @@ void loop() {
   int16_t ADCH = ads1115.readADC_SingleEnded(pin_entrada_humedad);
   int16_t ADCT = ads1115.readADC_SingleEnded(pin_entrada_temperatura);
   int16_t ADCL = ads1115.readADC_SingleEnded(pin_entrada_luz);
+  int16_t ADCS = ads1115.readADC_SingleEnded(pin_entrada_sal);
       delay(1000);
       Serial.println("¿Qué quieres hacer?");
       Serial.println("0. Modo de muestreo de todos los sensores.");
       Serial.println("1. Sensor de humedad.");
       Serial.println("2. Sensor de temperatura");
       Serial.println("3. Sensor de luz.");
-      Serial.println("4. Sensor de salinidad(no disponible)");
+      Serial.println("4. Sensor de salinidad");
       Serial.println("5. Mostrar posicion Sensores.");
       Serial.println("6. Muestra todos los sensores 10 veces y se activa el modo deep sleep.");
   char menu; //define un caracter
@@ -78,14 +80,14 @@ void loop() {
       humedad(pin_entrada_humedad, AirValue, WaterValue, ADCH);
       temperatura(b, m, ADCT, pin_entrada_temperatura);
       luminosidad(pin_entrada_luz, ADCL);
+      salinidad(power_pin_sal, pin_entrada_sal, DistilledValue, SalinityValue, ADCS);
     } 
     if (menu=='1'){humedad(pin_entrada_humedad, AirValue, WaterValue, ADCH); }
-    //if (menu=='2'){salinity_reading(power_pin_sal, pin_entrada_sal, DistilledValue, SalinityValue, ADCS);}
     if (menu=='2'){temperatura(b, m, ADCT, pin_entrada_temperatura);
    // termometro(RoomTemp_Offset, Temp_Sensitivity, degC );
     }
     if (menu=='3'){luminosidad(pin_entrada_luz, ADCL);}
-    if (menu=='4'){humedad(pin_entrada_humedad, AirValue, WaterValue, ADCH);}
+    if (menu=='4'){salinidad(power_pin_sal, pin_entrada_sal, DistilledValue, SalinityValue, ADCS);}
     if (menu=='5'){lecturaGPS();}
     }//FIN WHILE CONDICION DATA CORRECTO
     if (menu=='6'){
@@ -93,6 +95,7 @@ void loop() {
       humedad(pin_entrada_humedad, AirValue, WaterValue, ADCH);
       temperatura(b, m, ADCT, pin_entrada_temperatura);
       luminosidad(pin_entrada_luz, ADCL);
+      salinidad(power_pin_sal, pin_entrada_sal, DistilledValue, SalinityValue, ADCS);
        
       if (cont <=9) {
       cont++;

@@ -11,5 +11,6 @@ void humedad(int, int, int, int16_t);
 void temperatura(double, double, int16_t, int);
 // LUMINOSIDAD //
 void luminosidad(int, int16_t);
+void salinidad(int, int , int, int, int16_t);
 
 #endif

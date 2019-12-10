@@ -63,3 +63,31 @@ void luminosidad(int pin_entrada, int16_t adc){
         Serial.println("Soleado");
     }
 }//()luz
+
+void salinidad(int power_pin, int pin_entrada, int distilled_v, int sal_v, int16_t adc){
+    digitalWrite(power_pin, HIGH);
+    delay(100);
+    int16_t reading = adc;
+    digitalWrite(power_pin, LOW);
+    int16_t salinidad = porcentaje_lineal(sal_v,distilled_v,reading);
+    
+    if (salinidad<0) {
+          salinidad = 0;
+      }
+    if (salinidad>100){
+          salinidad = 100;
+      }
+      
+      Serial.println("===================");
+      Serial.println("SALINIDAD");
+      Serial.println("---------");
+      Serial.print("Lectura pin A");
+      Serial.print(pin_entrada);
+      Serial.print(": ");
+      Serial.println(reading);
+      Serial.print("Sal(%): ");
+      Serial.print(salinidad);
+      Serial.println("%");
+      Serial.println("===================");   
+}//()salinidad
+  

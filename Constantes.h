@@ -25,6 +25,12 @@ const double b = 0.79;
 const double m = 0.035;
 const int pin_entrada_temperatura = 2;
 
+//CONSTANTES DE SALINIDAD//
+  const int DistilledValue = 8000; //cambiar agua destilada
+  const int SalinityValue = 19600; //cambiar agua salinizada
+  const int pin_entrada_sal = 1; //cambiar pin entrada sal
+  const int power_pin_sal = 5; //cambiar pin voltaje para sal"
+
 //CONTADOR DEEP//
 int cont = 0;
 const byte interruptPin_ACC = 4;
